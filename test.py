@@ -1,63 +1,21 @@
-# Install clipspy first if not installed:
-# pip install clipspy
-
 import tkinter as tk
-from clipspy import Environment
 
 # -------------------------
-# Setup CLIPS Environment
-# -------------------------
-env = Environment()
-
-# Define simple rules for COVID-19 diagnosis
-env.build("""
-(deftemplate symptom
-   (slot name)
-   (slot value))
-
-(defrule covid_positive
-   (symptom (name fever) (value yes))
-   (symptom (name cough) (value yes))
-   =>
-   (assert (diagnosis covid)))
-   
-(defrule covid_negative
-   (symptom (name fever) (value no))
-   (symptom (name cough) (value no))
-   =>
-   (assert (diagnosis healthy)))
-
-(deffacts initial-facts
-   (symptom (name fever) (value unknown))
-   (symptom (name cough) (value unknown)))
-""")
-
-# -------------------------
-# GUI using Tkinter
+# Simple COVID-19 Expert System
 # -------------------------
 def diagnose():
     fever = fever_var.get()
     cough = cough_var.get()
     
-    # Reset environment
-    env.reset()
-    
-    # Update facts
-    env.assert_string(f"(symptom (name fever) (value {fever}))")
-    env.assert_string(f"(symptom (name cough) (value {cough}))")
-    
-    # Run inference
-    env.run()
-    
-    # Check result
-    for fact in env.facts():
-        if fact.template.name == "diagnosis":
-            result_var.set(f"Diagnosis: {fact['diagnosis']}")
-            return
-    
-    result_var.set("Diagnosis: Cannot determine")
+    # Simple rules
+    if fever == "yes" and cough == "yes":
+        result_var.set("Diagnosis: COVID-19 (suspected)")
+    elif fever == "no" and cough == "no":
+        result_var.set("Diagnosis: Healthy")
+    else:
+        result_var.set("Diagnosis: Cannot determine, consult a doctor")
 
-# Tkinter window
+# Tkinter GUI
 root = tk.Tk()
 root.title("COVID-19 Diagnosis Expert System")
 
