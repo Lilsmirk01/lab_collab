@@ -9,7 +9,7 @@ from clipspy import Environment
 # -------------------------
 env = Environment()
 
-# Define simple rules for COVID-19 diagnosis
+# Define simple rules for COVIDasdasd-19 diagnosis
 env.build("""
 (deftemplate symptom
    (slot name)
